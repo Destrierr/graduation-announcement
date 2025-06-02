@@ -81,20 +81,18 @@ body {
     padding: 15px;
   }
   
- result h1 {
-    font-size: 20px;
-  }
-  
- result h3 {
-    font-size: 18px;
-  }
-  
 .logo {
     width: 60px;
   }
-
- result p {
-    font-size: 12px;
+  result h1 {
+    font-size: 15px;
   }
-
+  
+ result h3 {
+    font-size: 15px;
+  }
+  
+ result p {
+    font-size: 10px;
+  }
 }
