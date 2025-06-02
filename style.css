@@ -81,11 +81,11 @@ body {
     padding: 15px;
   }
   
- h1 {
+ result h1 {
     font-size: 20px;
   }
   
- h3 {
+ result h3 {
     font-size: 18px;
   }
   
@@ -93,7 +93,7 @@ body {
     width: 60px;
   }
 
- p {
+ result p {
     font-size: 12px;
   }
 
