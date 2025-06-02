@@ -45,6 +45,12 @@ const API_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRxgifCmEQftGFa
         <tr><td>Bahasa Inggris</td><td>${siswa.BING}</td></tr>
         <tr><td>Seni Budaya</td><td>${siswa.SBK}</td></tr>
         <tr><td>PJOK</td><td>${siswa.PJOK}</td></tr>
+        <tr><td>IPS</td><td>${siswa.IPS}</td></tr>
+        <tr><td>Prakarya</td><td>${siswa.PKY}</td></tr>
+        <tr><td>Bahasa Palembang</td><td>${siswa.BP}</td></tr>
+        <tr><td>Kemuhammadiyaan</td><td>${siswa.KMD}</td></tr>
+        <tr><td>Bahasa Arab</td><td>${siswa.BARAB}</td></tr>
+        <tr><td>Baca Tulis Al-Quran</td><td>${siswa.BTA}</td></tr>
         <tr><td><strong>Rata-rata</strong></td><td><strong>${siswa.RATA}</strong></td></tr>
       </table>
       <p>Siswa dengan nama <strong>${siswa.NAMA}</strong> dengan NISN <strong>${nisn}</strong> dinyatakan <span style="color:green"><strong>LULUS</strong></p>
@@ -87,6 +93,12 @@ const API_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRxgifCmEQftGFa
       ["Bahasa Inggris", siswa.BING],
       ["Seni Budaya", siswa.SBK],
       ["PJOK", siswa.PJOK],
+      ["IPS", siswa.IPS],
+      ["Prakarya", siswa.PKY],
+      ["Bahasa Palembang", siswa.BP],
+      ["Kemuhammadiyaan", siswa.KMD],
+      ["Bahasa Arab", siswa.BARAB],
+      ["Baca TuliS Al-Quran", siswa.BTA],
       ["Rata-rata", siswa.RATA]
     ];
 
