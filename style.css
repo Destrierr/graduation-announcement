@@ -26,13 +26,26 @@ body {
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
   border-radius: 8px;
 }
+
 h1 {
   text-align: center;
   color: #2e7d32;
+  font-size: 14px;
 }
 
 h3 {
   text-align: center;
+  font-size: 14px;
+}
+
+h4 {
+  text-align: center;
+  font-size: 14px;
+}
+
+h5 {
+  text-align: center;
+  font-size: 10px;
 }
 
 p {
