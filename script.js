@@ -13,10 +13,11 @@ const API_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRxgifCmEQftGFa
 
   function cariSiswa() {
     const nama = document.getElementById('nama').value.trim().toUpperCase();
-    const nisn = document.getElementById('nisn').value.trim();
+    // const nisn = document.getElementById('nisn').value.trim();
 
     const siswa = siswaData.find(s =>
-      s.NAMA.toUpperCase() === nama && s.NISN === nisn
+      s.NAMA.toUpperCase() === nama 
+      // && s.NISN === nisn
     );
 
     const result = document.getElementById('result');
