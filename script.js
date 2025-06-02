@@ -1,64 +1,68 @@
 const API_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRxgifCmEQftGFaWrsZcyp0RjRTE91zgCDlT7q-uT_BQrgoXZs_8Tkocp8DkzjZEBF9GobuC0cJeDp9/pub?output=csv';
+    let siswaData = [];
 
-  let siswaData = [];
+    fetch(API_URL)
+      .then(res => res.text())
+      .then(csv => {
+        const parsed = Papa.parse(csv, { header: true });
+        siswaData = parsed.data;
+        console.log("Data siswa berhasil dimuat:", siswaData);
+      })
+      .catch(err => alert("Gagal memuat data siswa."));
 
-  fetch(API_URL)
-    .then(res => res.text())
-    .then(csv => {
-      const parsed = Papa.parse(csv, { header: true });
-      siswaData = parsed.data;
-      console.log("Data siswa berhasil dimuat:", siswaData);
-    })
-    .catch(err => alert("Gagal memuat data siswa."));
+    function cariSiswa() {
+      const nama = document.getElementById('nama').value.trim().toUpperCase();
+      const result = document.getElementById('result');
+      result.innerHTML = '';
 
-  function cariSiswa() {
-    const nama = document.getElementById('nama').value.trim().toUpperCase();
-    // const nisn = document.getElementById('nisn').value.trim();
-    const result = document.getElementById('result');
-    result.innerHTML = '';
+      if (!nama) {
+        result.innerHTML = "<p style='color:red;'>Silakan masukkan nama lengkap.</p>";
+        result.style.display = 'block';
+        return;
+      }
 
-    const siswa = siswaData.find(s => s.NAMA.toUpperCase() === nama);
-      // && s.NISN === nisn
-   
+      const siswa = siswaData.find(s => s.NAMA.toUpperCase() === nama);
 
-    // const result = document.getElementById('result');
-    if (!siswa) {
+      if (!siswa) {
+        result.innerHTML = "<p style='color:red;'>Data siswa tidak ditemukan.</p>";
+        result.style.display = 'block';
+        return;
+      }
+
+      const status = parseFloat(siswa.RATA) >= 75 ? "LULUS" : "TIDAK LULUS";
+
+      result.innerHTML = `
+        <h3>BIODATA SISWA</h3>
+        <p><b>Nama:</b> ${siswa.NAMA}</p>
+        <p><b>NIS:</b> ${siswa.NIS}</p>
+        <p><b>NISN:</b> ${siswa.NISN}</p>
+        <p><b>Tempat Tanggal Lahir:</b> ${siswa.TEMPAT}, ${siswa.TANGGAL_LAHIR}</p>
+
+        <h4>Rincian Nilai:</h4>
+        <table>
+          <tr><th>Mata Pelajaran</th><th>Nilai</th></tr>
+          <tr><td>Bahasa Indonesia</td><td>${siswa.BINDO}</td></tr>
+          <tr><td>Matematika</td><td>${siswa.MTK}</td></tr>
+          <tr><td>IPA</td><td>${siswa.IPA}</td></tr>
+          <tr><td>PKN</td><td>${siswa.PKN}</td></tr>
+          <tr><td>PAI</td><td>${siswa.PAI}</td></tr>
+          <tr><td>Bahasa Inggris</td><td>${siswa.BING}</td></tr>
+          <tr><td>Seni Budaya</td><td>${siswa.SBK}</td></tr>
+          <tr><td>PJOK</td><td>${siswa.PJOK}</td></tr>
+          <tr><td>IPS</td><td>${siswa.IPS}</td></tr>
+          <tr><td>Prakarya</td><td>${siswa.PKY}</td></tr>
+          <tr><td>Bahasa Palembang</td><td>${siswa.BP}</td></tr>
+          <tr><td>Kemuhammadiyaan</td><td>${siswa.KMD}</td></tr>
+          <tr><td>Bahasa Arab</td><td>${siswa.BARAB}</td></tr>
+          <tr><td>Baca Tulis Al-Qur'an</td><td>${siswa.BTA}</td></tr>
+          <tr><td><strong>Rata-rata</strong></td><td><strong>${siswa.RATA}</strong></td></tr>
+        </table>
+        <p style="margin-top:10px;">Siswa dengan nama <strong>${siswa.NAMA}</strong> dinyatakan <strong style="color:green;">${status}</strong></p>
+        <p><em>*) Surat keterangan kelulusan dapat diambil di sekolah</em></p>
+      `;
+
       result.style.display = 'block';
-      result.innerHTML = '<p style="color:red;">Data siswa tidak ditemukan.</p>';
-      return;
     }
-
-    const status = parseFloat(siswa.RATA) >= 75 ? "Lulus" : "Tidak Lulus";
-
-    result.nilaiHTML = `
-      <h3>BIODATA SISWA</h3>
-      <p><b>Nama      :</b> ${siswa.NAMA}</p>
-      <p><b>NIS       :</b> ${siswa.NIS}</p>
-      <p><b>NISN      :</b> ${siswa.NISN}</p>
-      <p><b>Tempat Tanggal Lahir:</b> ${siswa.TEMPAT}, ${siswa.TANGGAL_LAHIR}</p>
-      <h4>Rincian Nilai:</h4>
-      <table>
-        <tr><th>Mata Pelajaran</th><th>Nilai</th></tr>
-        <tr><td>Bahasa Indonesia</td><td>${siswa.BINDO}</td></tr>
-        <tr><td>Matematika</td><td>${siswa.MTK}</td></tr>
-        <tr><td>IPA</td><td>${siswa.IPA}</td></tr>
-        <tr><td>PKN</td><td>${siswa.PKN}</td></tr>
-        <tr><td>PAI</td><td>${siswa.PAI}</td></tr>
-        <tr><td>Bahasa Inggris</td><td>${siswa.BING}</td></tr>
-        <tr><td>Seni Budaya</td><td>${siswa.SBK}</td></tr>
-        <tr><td>PJOK</td><td>${siswa.PJOK}</td></tr>
-        <tr><td>IPS</td><td>${siswa.IPS}</td></tr>
-        <tr><td>Prakarya</td><td>${siswa.PKY}</td></tr>
-        <tr><td>Bahasa Palembang</td><td>${siswa.BP}</td></tr>
-        <tr><td>Kemuhammadiyaan</td><td>${siswa.KMD}</td></tr>
-        <tr><td>Bahasa Arab</td><td>${siswa.BARAB}</td></tr>
-        <tr><td>Baca Tulis Al-Quran</td><td>${siswa.BTA}</td></tr>
-        <tr><td><strong>Rata-rata</strong></td><td><strong>${siswa.RATA}</strong></td></tr>
-      </table>
-      <p>Siswa dengan nama <strong>${siswa.NAMA}</strong> dengan NISN <strong>${nisn}</strong> dinyatakan <span style="color:green"><strong>LULUS</strong></p>
-      <h5>*) Surat keterangan kelulusan dapat diambil disekolah </h5>
-      
-    `;
 
     result.innerHTML = nilaiHTML;
     result.style.display = 'block';
