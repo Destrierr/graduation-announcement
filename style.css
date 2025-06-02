@@ -30,7 +30,6 @@ body {
 h1 {
   text-align: center;
   color: #2e7d32;
-  font-size: 14px;
 }
 
 h3 {
@@ -39,12 +38,10 @@ h3 {
 }
 
 h4 {
-  text-align: center;
-  font-size: 14px;
+  font-size: 12px;
 }
 
 h5 {
-  text-align: center;
   font-size: 10px;
 }
 
