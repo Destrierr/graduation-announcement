@@ -14,13 +14,14 @@ const API_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRxgifCmEQftGFa
   function cariSiswa() {
     const nama = document.getElementById('nama').value.trim().toUpperCase();
     // const nisn = document.getElementById('nisn').value.trim();
+    const result = document.getElementById('result');
+    result.innerHTML = '';
 
-    const siswa = siswaData.find(s =>
-      s.NAMA.toUpperCase() === nama 
+    const siswa = siswaData.find(s => s.NAMA.toUpperCase() === nama 
       // && s.NISN === nisn
     );
 
-    const result = document.getElementById('result');
+    // const result = document.getElementById('result');
     if (!siswa) {
       result.style.display = 'block';
       result.innerHTML = '<p style="color:red;">Data siswa tidak ditemukan.</p>';
