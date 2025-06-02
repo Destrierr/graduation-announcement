@@ -84,15 +84,15 @@ body {
 .logo {
     width: 60px;
   }
-  result h1 {
+.result h1 {
     font-size: 15px;
   }
   
- result h3 {
+ .result h3 {
     font-size: 15px;
   }
   
- result p {
+ .result p {
     font-size: 10px;
   }
 }
