@@ -17,9 +17,9 @@ const API_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRxgifCmEQftGFa
     const result = document.getElementById('result');
     result.innerHTML = '';
 
-    const siswa = siswaData.find(s => s.NAMA.toUpperCase() === nama 
+    const siswa = siswaData.find(s => s.NAMA.toUpperCase() === nama);
       // && s.NISN === nisn
-    );
+   
 
     // const result = document.getElementById('result');
     if (!siswa) {
@@ -30,7 +30,7 @@ const API_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRxgifCmEQftGFa
 
     const status = parseFloat(siswa.RATA) >= 75 ? "Lulus" : "Tidak Lulus";
 
-    let nilaiHTML = `
+    result.nilaiHTML = `
       <h3>BIODATA SISWA</h3>
       <p><b>Nama      :</b> ${siswa.NAMA}</p>
       <p><b>NIS       :</b> ${siswa.NIS}</p>
