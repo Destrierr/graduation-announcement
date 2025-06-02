@@ -28,7 +28,7 @@ const API_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRxgifCmEQftGFa
 
     const status = parseFloat(siswa.RATA) >= 75 ? "Lulus" : "Tidak Lulus";
 
-    let nilaiHTML = 
+    let nilaiHTML = `
       <h3>BIODATA SISWA</h3>
       <p><b>Nama      :</b> ${siswa.NAMA}</p>
       <p><b>NIS       :</b> ${siswa.NIS}</p>
@@ -54,9 +54,8 @@ const API_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRxgifCmEQftGFa
         <tr><td><strong>Rata-rata</strong></td><td><strong>${siswa.RATA}</strong></td></tr>
       </table>
       <p>Siswa dengan nama <strong>${siswa.NAMA}</strong> dengan NISN <strong>${nisn}</strong> dinyatakan <span style="color:green"><strong>LULUS</strong></p>
-      <h5>*) Surat keterangan kelulusan dapat diambil disekolah </h5>
-      
-    ;
+      <h5>*) Surat keterangan kelulusan dapat diambil disekolah </h5>  
+    `;
 
     result.innerHTML = nilaiHTML;
     result.style.display = 'block';
@@ -78,9 +77,9 @@ const API_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRxgifCmEQftGFa
 
     doc.setFontSize(12);
     let y = 50;
-    doc.text(Nama: ${siswa.NAMA}, 20, y); y += 10;
-    doc.text(NISN: ${siswa.NISN}, 20, y); y += 10;
-    doc.text(TTL: ${siswa.TEMPAT}, ${siswa.TANGGAL_LAHIR}, 20, y); y += 15;
+    doc.text(`Nama: ${siswa.NAMA}`, 20, y); y += 10;
+    doc.text(`NISN: ${siswa.NISN}`, 20, y); y += 10;
+    doc.text(`TTL: ${siswa.TEMPAT}, ${siswa.TANGGAL_LAHIR}`, 20, y); y += 15;
 
     doc.text("Rincian Nilai:", 20, y); y += 10;
 
@@ -103,16 +102,16 @@ const API_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRxgifCmEQftGFa
     ];
 
     mapel.forEach(([mp, nilai]) => {
-      doc.text(${mp}: ${String(nilai ?? '-')}, 25, y);
+      doc.text(`${mp}: ${String(nilai ?? '-')}`, 25, y);
       y += 8;
     });
 
     const status = parseFloat(siswa.RATA) >= 75 ? 'LULUS' : 'TIDAK LULUS';
-    doc.text(Status Kelulusan: ${status}, 20, y); y += 20;
+    doc.text(`Status Kelulusan: ${status}`, 20, y); y += 20;
 
     doc.text("Kepala Sekolah,", 140, y); y += 30;
     doc.text("Drs. H. Rachman Rasyid, M.Pd", 140, y); y += 10;
     doc.text("NIP. 196309011988031001", 140, y);
 
-    doc.save(Bukti_Kelulusan_${siswa.NAMA.replace(/\s/g, "_")}.pdf);
+    doc.save(`Bukti_Kelulusan_${siswa.NAMA.replace(/\s/g, "_")}.pdf`);
   }
