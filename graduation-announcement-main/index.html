@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pengumuman Kelulusan</title>
+  <link href="style.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.legacy.min.js"></script>
+</head>
+<body>
+  
+<div class="container">
+  <div class="logo">
+    <img src="./assests/logo.png" alt="Logo Sekolah" width="120">
+  </div>
+<h1>PENGUMUMAN KELULUSAN SMP MUHAMMADIYAH 08 PALEMBANG</h1>
+<label>Nama Lengkap :</label>
+<input type="text" id="nama" placeholder="Masukkan Nama Lengkap" required>
+
+<label>NISN :</label>
+<input type="text" id="nisn" placeholder="Masukkan NISN" required>
+
+<button onclick="cariSiswa()">Submit</button>
+<div class="result" id="result" style="display:none;"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard Admin - Kelulusan</title>
+  <link href="style.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/supabase/2.39.2/supabase.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    .admin-box { max-width: 600px; margin: 40px auto; padding: 20px; border: 1px solid #ccc; background: #fff; }
+    .hidden { display: none; }
+    .logout-btn { background-color: #f44336; margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div id="login-section" class="admin-box">
+    <h2>Login Admin</h2>
+    <label>Email Admin:</label>
+    <input type="email" id="email" placeholder="admin@sekolah.sch.id">
+    <label>Password:</label>
+    <input type="password" id="password" placeholder="******">
+    <button onclick="loginAdmin()">Masuk</button>
+  </div>
+
+  <div id="dashboard-section" class="admin-box hidden">
+    <h2>Selamat Datang, Admin</h2>
+    <p>Gunakan fitur di bawah ini untuk memperbarui database kelulusan siswa via berkas Excel.</p>
+    <hr>
+    
+    <h3>Mass Upload Data Siswa (.xlsx / .csv)</h3>
+    <input type="file" id="upload-excel" accept=".xlsx, .xls, .csv" />
+    <button onclick="prosesExcel()" style="background-color: #4CAF50;">Proses & Upload ke Database</button>
+    
+    <div id="upload-status" style="margin-top: 15px; font-weight: bold;"></div>
+    
+    <button onclick="logoutAdmin()" class="logout-btn">Log Out</button>
+  </div>
+</div>
+
+<script>
+  // ISI DENGAN DATA DARI SETTINGS > API SUPABASE KAMU
+  const SUPABASE_URL = 'https://URL_PROYEK_KAMU.supabase.co';
+  const SUPABASE_KEY = 'KEY_ANON_PUBLIC_KAMU';
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Memeriksa status login saat halaman dibuka
+  window.onload = async () => {
+    const { data } = await supabase.auth.getSession();
+    if (data.session) {
+      tampilkanDashboard();
+    }
+  };
+
+  async function loginAdmin() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      alert("Gagal Login: " + error.message);
+    } else {
+      tampilkanDashboard();
+    }
+  }
+
+  function tampilkanDashboard() {
+    document.getElementById('login-section').classList.add('hidden');
+    document.getElementById('dashboard-section').classList.remove('hidden');
+  }
+
+  async function logoutAdmin() {
+    await supabase.auth.signOut();
+    location.reload();
+  }
+
+  // FUNGSI MEMBACA EXCEL DAN IMPORT LANGSUNG KE SUPABASE
+  function prosesExcel() {
+    const fileInput = document.getElementById('upload-excel');
+    const statusDiv = document.getElementById('upload-status');
+    
+    if (!fileInput.files.length) {
+      alert("Silakan tentukan berkas Excel terlebih dahulu!");
+      return;
+    }
+
+    statusDiv.style.color = "blue";
+    statusDiv.innerText = "Membaca berkas excel...";
+
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+
+    reader.onload = async function(e) {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        
+        // Mengubah baris excel menjadi objek JSON (Nama properti otomatis mengikuti header kolom)
+        let jsonSiswa = XLSX.utils.sheet_to_json(worksheet);
+
+        // Transformasi nama properti (memastikan huruf kecil agar singkron dengan kolom di Supabase)
+        const dataSiapUpload = jsonSiswa.map(item => ({
+          nis: String(item.NIS || item.nis),
+          nama: String(item.NAMA || item.nama),
+          nisn: String(item.NISN || item.nisn || ''),
+          tempat: String(item.TEMPAT || item.tempat || ''),
+          tanggal_lahir: String(item.TANGGAL_LAHIR || item.tanggal_lahir || ''),
+          bindo: parseFloat(item.BINDO || item.bindo || 0),
+          mtk: parseFloat(item.MTK || item.mtk || 0),
+          ipa: parseFloat(item.IPA || item.ipa || 0),
+          pkn: parseFloat(item.PKN || item.pkn || 0),
+          pai: parseFloat(item.PAI || item.pai || 0),
+          bing: parseFloat(item.BING || item.bing || 0),
+          sbk: parseFloat(item.SBK || item.sbk || 0),
+          pjok: parseFloat(item.PJOK || item.pjok || 0),
+          ips: parseFloat(item.IPS || item.ips || 0),
+          pky: parseFloat(item.PKY || item.pky || 0),
+          bp: parseFloat(item.BP || item.bp || 0),
+          kmd: parseFloat(item.KMD || item.kmd || 0),
+          barab: parseFloat(item.BARAB || item.barab || 0),
+          bta: parseFloat(item.BTA || item.bta || 0),
+          rata: parseFloat(item.RATA || item.rata || 0)
+        }));
+
+        statusDiv.innerText = `Menyimpan ${dataSiapUpload.length} data siswa ke database...`;
+
+        // Upsert: Jika data NIS belum ada maka disisipkan (insert), jika sudah ada akan diperbarui (update)
+        const { error } = await supabase
+          .from('siswa')
+          .upsert(dataSiapUpload, { onConflict: 'nis' });
+
+        if (error) throw error;
+
+        statusDiv.style.color = "green";
+        statusDiv.innerText = `Sukses! Berhasil mengunggah ${dataSiapUpload.length} data siswa ke database.`;
+        alert("Seluruh data berhasil disinkronisasikan!");
+
+      } catch (err) {
+        console.error(err);
+        statusDiv.style.color = "red";
+        statusDiv.innerText = "Terjadi kesalahan: " + err.message;
+      }
+    };
+
+    reader.readAsArrayBuffer(file);
+  }
+</script>
+</body>
+</html>
